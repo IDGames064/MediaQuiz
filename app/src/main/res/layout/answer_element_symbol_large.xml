@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_margin="2dp"
+        android:background="@drawable/element_bg2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvLetter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:shadowColor="@color/black"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="18"
+            android:textColor="@color/amber_200"
+            android:textSize="22sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+</LinearLayout>

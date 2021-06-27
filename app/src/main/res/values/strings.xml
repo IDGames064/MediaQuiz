@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name" translatable="false">Media Quiz</string>
+
+    <string name="quiz_title_movies" translatable="false">Movie Quiz</string>
+    <string name="quiz_title_series" translatable="false">TV Series Quiz</string>
+    <string name="quiz_title_artists" translatable="false">Music Quiz</string>
+
+    <string name="start_quiz">Начать Квиз</string>
+    <string name="load_movies">Загрузить фильмы</string>
+    <string name="load_series">Загрузить сериалы</string>
+    <string name="load_artists">Загрузить исполнителей</string>
+
+    <plurals name="number_movies_loaded">
+        <item quantity="one">%1$d фильм загружен</item>
+        <item quantity="few">%1$d фильма загружено</item>
+        <item quantity="many">%1$d фильмов загружено</item>
+        <item quantity="other">%1$d фильмов загружено</item>
+    </plurals>
+    <plurals name="number_series_loaded">
+        <item quantity="one">%1$d сериал загружен</item>
+        <item quantity="few">%1$d сериала загружено</item>
+        <item quantity="many">%1$d сериалов загружено</item>
+        <item quantity="other">%1$d сериалов загружено</item>
+    </plurals>
+    <plurals name="number_artists_loaded">
+        <item quantity="one">%1$d исполнитель загружен</item>
+        <item quantity="few">%1$d исполнителя загружено</item>
+        <item quantity="many">%1$d исполнителей загружено</item>
+        <item quantity="other">%1$d исполнителей загружено</item>
+    </plurals>
+
+    <string name="description_movies">Угадай фильмы по трейлеру!</string>
+    <string name="description_series">Угадай сериалы по трейлеру!</string>
+    <string name="description_artists">Угадай исполнителей по видео!</string>
+    <string name="error_loading_list">Ошибка загрузки списка!</string>
+
+    <!-- Prefs -->
+    <string name="quiz_mode">Режим Квиза</string>
+    <string name="language">Язык</string>
+    <string name="movie_loading">Параметры загрузки</string>
+    <string name="vote_average">Средняя оценка от %.1f</string>
+    <string name="vote_count">Кол-во голосов от %d</string>
+    <string name="artist_count">Кол-во ~%d</string>
+    <string name="quiz_mode_movies">Фильмы</string>
+    <string name="quiz_mode_series">Сериалы</string>
+    <string name="quiz_mode_artists">Исполнители</string>
+    <string name="quiz_mode_letters">По буквам</string>
+    <string name="quiz_mode_options">По вариантам</string>
+
+    <!-- Quiz -->
+    <string name="next_movie">Дальше</string>
+    <string name="hint">Подсказка</string>
+    <string name="question_number">Вопрос № %d</string>
+    <string name="error_loading_video">Ошибка загрузки видео!</string>
+
+    <string name="movie_display1">%s (%s%s)</string>
+    <string name="movie_display2">♥ %s  (%,d голосов)</string>
+    <string name="point_count">⭐&#8202;%s</string>
+
+    <string name="empty"></string>
+    <plurals name="seasons">
+        <item quantity="one">, %1$d сезон</item>
+        <item quantity="few">, %1$d сезона</item>
+        <item quantity="many">, %1$d сезонов</item>
+        <item quantity="other">, %1$d сезонов</item>
+    </plurals>
+
+</resources>

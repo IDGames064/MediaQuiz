@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucent_blue_grey"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvQuizMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="start"
+        android:text="@string/quiz_mode"
+        android:textColor="?android:textColor"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/rgDataType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rbMovies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/quiz_mode_movies"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/rbSeries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/quiz_mode_series"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/rbArtists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/quiz_mode_artists"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/rgQuizMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rbLetters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/quiz_mode_letters"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/rbOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/quiz_mode_options"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="start"
+        android:text="@string/language"
+        android:textColor="?android:textColor"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/rgLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rbRussian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_russia"
+            android:drawablePadding="6dp"
+            android:fontFamily="sans-serif-light"
+            android:text="Русский"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/rbEnglish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_usa"
+            android:drawablePadding="6dp"
+            android:fontFamily="sans-serif-light"
+            android:text="English"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvLoadingParams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="start"
+        android:text="@string/movie_loading"
+        android:textColor="?android:textColor"
+        android:textSize="18sp" />
+
+
+    <LinearLayout
+        android:id="@+id/llMovies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvMovieVoteCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="@string/vote_count"
+            android:textColor="?colorControlActivated"
+            android:textSize="16sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sbMovieVoteCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="100"
+            android:valueFrom="200"
+            android:valueTo="10000"
+            app:labelBehavior="gone" />
+
+        <TextView
+            android:id="@+id/tvMovieVoteAverage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="@string/vote_average"
+            android:textColor="?colorControlActivated"
+            android:textSize="16sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sbMovieVoteAverage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="0.1"
+            android:valueFrom="5"
+            android:valueTo="9"
+            app:labelBehavior="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSeries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvSeriesVoteCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="@string/vote_count"
+            android:textColor="?colorControlActivated"
+            android:textSize="16sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sbSeriesVoteCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="100"
+            android:valueFrom="200"
+            android:valueTo="10000"
+            app:labelBehavior="gone" />
+
+        <TextView
+            android:id="@+id/tvSeriesVoteAverage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="@string/vote_average"
+            android:textColor="?colorControlActivated"
+            android:textSize="16sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sbSeriesVoteAverage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="0.1"
+            android:valueFrom="5"
+            android:valueTo="9"
+            app:labelBehavior="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llArtists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvArtistCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="start"
+            android:text="@string/artist_count"
+            android:textColor="?colorControlActivated"
+            android:textSize="16sp" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sbArtistCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="100"
+            android:valueFrom="200"
+            android:valueTo="10000"
+            android:layout_marginBottom="72dp"
+            app:labelBehavior="gone" />
+    </LinearLayout>
+
+
+</LinearLayout>
+

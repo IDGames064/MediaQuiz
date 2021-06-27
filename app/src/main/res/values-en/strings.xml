@@ -1,0 +1,53 @@
+<resources>
+    <string name="start_quiz">Start Quiz</string>
+    <string name="load_movies">Load Movies</string>
+    <string name="load_series">Load TV Series</string>
+    <string name="load_artists">Load Artists</string>
+
+    <plurals name="number_movies_loaded">
+        <item quantity="one">%1$d movie loaded</item>
+        <item quantity="other">%1$d movies loaded</item>
+    </plurals>
+    <plurals name="number_series_loaded">
+        <item quantity="one">%1$d TV serial loaded</item>
+        <item quantity="other">%1$d TV series loaded</item>
+    </plurals>
+    <plurals name="number_artists_loaded">
+        <item quantity="one">%1$d artist loaded</item>
+        <item quantity="other">%1$d artists loaded</item>
+    </plurals>
+
+    <string name="description_movies">Guess movies by trailer!</string>
+    <string name="description_series">Guess TV series by trailer!</string>
+    <string name="description_artists">Guess artists by video!</string>
+    <string name="error_loading_list">Error loading list!</string>
+
+    <!-- Prefs -->
+    <string name="quiz_mode">Quiz Mode</string>
+    <string name="language">Language</string>
+    <string name="movie_loading">Loading parameters</string>
+    <string name="vote_average">Average score above %.1f</string>
+    <string name="vote_count">Vote count above %d</string>
+    <string name="artist_count">Count ~%d</string>
+    <string name="quiz_mode_movies">Movies</string>
+    <string name="quiz_mode_series">TV Series</string>
+    <string name="quiz_mode_artists">Artists</string>
+    <string name="quiz_mode_letters">By Letters</string>
+    <string name="quiz_mode_options">By Options</string>
+
+    <!-- Quiz -->
+    <string name="next_movie">Next</string>
+    <string name="hint">Use Hint</string>
+    <string name="question_number">Question № %d</string>
+    <string name="error_loading_video">Error loading video!</string>
+
+    <string name="movie_display1">%s (%s%s)</string>
+    <string name="movie_display2">♥ %s  (%,d votes)</string>
+    <string name="point_count">⭐&#8202;%s</string>
+
+    <string name="empty"></string>
+    <plurals name="seasons">
+        <item quantity="one">, %1$d season</item>
+        <item quantity="other">, %1$d seasons</item>
+    </plurals>
+</resources>

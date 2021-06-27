@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="idprogs.mediaquiz.ui.main.MainActivity">
+
+    <data>
+        <import type="idprogs.mediaquiz.utility.DataType"/>
+        <variable
+            name="viewModel"
+            type="idprogs.mediaquiz.ui.main.MainViewModel" />
+    </data>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@{viewModel.currentType == DataType.DATA_ARTISTS ? @drawable/music_bg : @drawable/movie_bg}">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:fontFamily="@font/budmo_jiggler"
+        android:text="@{viewModel.currentType == DataType.DATA_MOVIES ? @string/quiz_title_movies : viewModel.currentType == DataType.DATA_SERIES ? @string/quiz_title_series : @string/quiz_title_artists}"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="@dimen/_44ssp"
+        android:shadowColor="?android:textColorPrimary"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/amatic"
+        android:text="@{viewModel.currentType == DataType.DATA_MOVIES ? @string/description_movies : viewModel.currentType == DataType.DATA_SERIES ? @string/description_series : @string/description_artists}"
+        android:textSize="@dimen/_24ssp"
+        android:textColor="@color/blue_grey_100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <Button
+        android:id="@+id/btnStart"
+        style="@style/AppButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_quiz"
+        android:enabled="@{viewModel.entryCount}"
+        android:onClick="@{() -> viewModel.startQuiz()}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@drawable/text_color_selector"
+        android:backgroundTint="#40000000"/>
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@{viewModel.currentType == DataType.DATA_MOVIES ? @plurals/number_movies_loaded(viewModel.entryCount,viewModel.entryCount) : viewModel.currentType == DataType.DATA_SERIES ? @plurals/number_series_loaded(viewModel.entryCount,viewModel.entryCount) : @plurals/number_artists_loaded(viewModel.entryCount,viewModel.entryCount)}"
+        tools:text="3000"
+        android:textColor="@color/blue_grey_100"
+        app:layout_constraintBottom_toTopOf="@+id/btnLoad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnLoad"
+        style="@style/AppButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:onClick="@{() -> viewModel.getMovieList()}"
+        android:text="@{viewModel.currentType == DataType.DATA_MOVIES ? @string/load_movies : viewModel.currentType == DataType.DATA_SERIES ? @string/load_series : @string/load_artists}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnAbout"
+        style="@style/AppIconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
+        android:drawableLeft="@drawable/ic_info"
+        android:onClick="@{() -> viewModel.showInfo()}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnLoad"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        style="@style/AppIconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="2dp"
+        android:drawableLeft="@drawable/ic_settings"
+        android:text=""
+        android:onClick="@{() -> viewModel.showPreferences()}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnLoad" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

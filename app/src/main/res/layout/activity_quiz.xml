@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="idprogs.mediaquiz.ui.quiz.QuizActivity">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="idprogs.mediaquiz.ui.quiz.QuizViewModel" />
+    </data>
+
+
+    <LinearLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/movie_bg"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/flTop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_290sdp"
+            android:layout_marginTop="10dp">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:alpha="0.7"
+                android:indeterminateTint="@color/orange_200" />
+
+
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/video_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:visibility="invisible"
+                app:use_controller="false" />
+
+            <ImageView
+                android:id="@+id/fallback"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:gravity="bottom"
+                android:visibility="@{viewModel.questionAnswered}">
+
+                <TextView
+                    android:id="@+id/tvMovie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/amaticbold"
+                    android:lineSpacingExtra="-10dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="6"
+                    android:text="@{@string/movie_display1(viewModel.movieLiveData.title,viewModel.movieLiveData.getYear(),viewModel.movieLiveData.number_of_seasons > 0 ? @plurals/seasons(viewModel.movieLiveData.number_of_seasons,viewModel.movieLiveData.number_of_seasons) : @string/empty)}"
+                    android:textColor="@color/blue_grey_100"
+                    android:textSize="@dimen/_22ssp" />
+
+                <TextView
+                    android:id="@+id/tvGenres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvMovie"
+                    android:layout_marginTop="-8dp"
+                    android:fontFamily="@font/amaticbold"
+                    android:lineSpacingExtra="-6dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="6"
+                    android:text="@{viewModel.movieLiveData.getGenresString()}"
+                    android:textColor="@color/blue_grey_300"
+                    android:textSize="@dimen/_13ssp" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvGenres"
+                    android:layout_marginTop="-6dp"
+                    android:fontFamily="@font/amaticbold"
+                    android:lineSpacingExtra="-6dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="6"
+                    android:text="@{@string/movie_display2(viewModel.movieLiveData.vote_average, viewModel.movieLiveData.vote_count)}"
+                    android:textColor="@color/blue_grey_200"
+                    android:textSize="@dimen/_18ssp" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/restart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:onClick="@{() -> viewModel.restartCountdown()}"
+                android:src="@drawable/ic_restart"
+                android:visibility="@{viewModel.timerState == viewModel.TimerState.STATE_FINISHED}" />
+
+
+            <TextView
+                android:id="@+id/tvCountDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:fontFamily="@font/queer"
+                android:shadowColor="@color/amber_200"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="16"
+                android:text="@{viewModel.countDown}"
+                android:textColor="@color/amber_200"
+                android:textSize="@dimen/_38ssp"
+                android:visibility="@{(viewModel.timerState == viewModel.TimerState.STATE_RUNNING || viewModel.timerState == viewModel.TimerState.STATE_PAUSED) &amp;&amp; !viewModel.questionAnswered}" />
+
+            <TextView
+                android:id="@+id/tvCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="26dp"
+                android:fontFamily="@font/perfograma"
+                android:shadowColor="@color/pink_200"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="10"
+                android:text="@{@string/question_number(viewModel.questionNumber)}"
+                android:textColor="@color/amber_50"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/tvPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="23dp"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:fontFamily="@font/perfograma"
+                android:shadowColor="@color/pink_200"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="10"
+                android:text="@{@string/point_count(viewModel.pointCount)}"
+                android:textColor="@color/amber_50"
+                android:textSize="@dimen/_18ssp" />
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flBottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-25dp">
+
+            <FrameLayout
+                android:id="@+id/fContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp" />
+
+            <RelativeLayout
+                android:id="@+id/llNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:visibility="@{viewModel.questionAnswered}">
+
+                <Button
+                    android:id="@+id/btnShare"
+                    style="@style/AppIconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="#60000000"
+                    app:icon="@drawable/ic_share"
+                    android:onClick="@{() -> viewModel.shareEntry()}" />
+
+                <Button
+                    android:id="@+id/btnNext"
+                    style="@style/AppButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="#60000000"
+                    android:onClick="@{() -> viewModel.nextQuestion()}"
+                    android:text="@string/next_movie" />
+            </RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+
+</layout>

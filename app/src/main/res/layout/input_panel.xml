@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+<LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        android:background="#70000000"
+        android:orientation="vertical">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/fbSymbols"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:flexWrap="wrap"
+        app:justifyContent="center"/>
+
+    <Button
+        style="@style/HintButton"
+        android:id="@+id/btnHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="-3dp"
+        android:drawableLeft="@drawable/ic_hint"
+        />
+
+</LinearLayout>
+
+</LinearLayout>
