@@ -52,9 +52,8 @@ class SettingsPopup(val context: Context) {
         binding.tvArtistCount.text = context.getString(R.string.artist_count, ARTIST_COUNT)
         binding.sbArtistCount.addOnChangeListener { _,value,_ ->  binding.tvArtistCount.text = context.getString(R.string.artist_count, value.toInt())}
         binding.sbArtistCount.value = ARTIST_COUNT+0f
-
-
         binding.rgDataType.setOnCheckedChangeListener { _, _ -> setVisibleSettingsSubPanel()}
+        setVisibleSettingsSubPanel()
     }
 
     private fun setValues() {

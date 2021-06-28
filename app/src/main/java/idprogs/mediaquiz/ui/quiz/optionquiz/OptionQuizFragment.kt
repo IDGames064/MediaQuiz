@@ -48,7 +48,7 @@ class OptionQuizFragment: BaseFragment() {
         mBinding.llOptions.removeAllViews()
         for (option in options) {
             val view = View.inflate(context, R.layout.option_view, null) as Button
-            if (option == mViewModel.movieLiveData.value?.title) btnCorrect = view
+            if (option == mViewModel.movieLiveData.value?.title || option == mViewModel.artistLiveData.value?.name) btnCorrect = view
             view.text = option
             view.setOnClickListener {
                 btnCurrent = view

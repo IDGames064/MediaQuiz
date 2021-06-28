@@ -10,11 +10,11 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="DarkTheme" parent="AppTheme">
+    <style name="MovieTheme" parent="AppTheme">
         <item name="colorPrimary">@color/amber_200</item>
         <item name="colorPrimaryDark">@color/amber_400</item>
         <item name="colorAccent">@color/amber_200</item>
-        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlNormal">@color/blue_grey_400</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
         <item name="android:windowBackground">@color/grey_900</item>
@@ -22,15 +22,32 @@
         <item name="android:textColor">@color/amber_200</item>
         <item name="android:textColorPrimary">@color/amber_300</item>
         <item name="android:textAppearanceInverse">@color/black</item>
+        <item name="android:fontFamily">@font/budmo_jiggler</item>
+    </style>
+
+    <style name="MusicTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/amber_200</item>
+        <item name="colorPrimaryDark">@color/amber_400</item>
+        <item name="colorAccent">@color/amber_200</item>
+        <item name="colorControlNormal">@color/pink_200</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:windowBackground">@color/grey_900</item>
+        <item name="colorBackgroundFloating">@color/grey_800</item>
+        <item name="android:textColor">@color/amber_50</item>
+        <item name="android:textColorPrimary">@color/amber_200</item>
+        <item name="android:textAppearanceInverse">@color/black</item>
+        <item name="android:fontFamily">@font/mexcellent</item>
     </style>
 
     <style name="AppButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="cornerRadius">32dp</item>
-        <item name="rippleColor">@color/blue_grey_400</item>
-        <item name="strokeColor">@color/blue_grey_400</item>
+        <item name="rippleColor">?android:colorControlNormal</item>
+        <item name="strokeColor">?android:colorControlNormal</item>
         <item name="android:textColor">?android:textColorPrimary</item>
-        <item name="android:shadowColor">@color/blue_grey_100</item>
+        <item name="android:shadowColor">?android:colorControlNormal</item>
         <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:shadowRadius">10</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">0</item>
@@ -38,13 +55,14 @@
 
     <style name="OptionButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="cornerRadius">32dp</item>
-        <item name="rippleColor">@color/blue_grey_400</item>
-        <item name="strokeColor">@color/blue_grey_400</item>
+        <item name="rippleColor">?android:colorControlNormal</item>
+        <item name="strokeColor">?android:colorControlNormal</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="android:textColor">@color/amber_50</item>
         <item name="android:textSize">@dimen/option_text_size</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:backgroundTint">#000816</item>
         <item name="textAllCaps">false</item>
     </style>
@@ -60,6 +78,7 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">0dp</item>
         <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:backgroundTint">@color/teal_600</item>
     </style>
 

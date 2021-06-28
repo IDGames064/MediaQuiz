@@ -47,8 +47,11 @@ class MainViewModel @Inject constructor (
     fun getMovieList() {
         viewModelScope.launch(dispatchers.io) {
             sendCommand(Event.Loading(true))
-            val result = if (DATA_TYPE == DataType.DATA_ARTISTS) dataManager.loadArtistList() { sendCommand(Event.LoadingProgress(it)) }
-                else dataManager.loadMovieList(LANGUAGE, MOVIES_VOTE_COUNT, MOVIES_VOTE_AVERAGE) { sendCommand(Event.LoadingProgress(it)) }
+            val result = when (DATA_TYPE) {
+                DataType.DATA_ARTISTS -> dataManager.loadArtistList() { sendCommand(Event.LoadingProgress(it)) }
+                DataType.DATA_SERIES -> dataManager.loadMovieList(LANGUAGE, SERIES_VOTE_COUNT, SERIES_VOTE_AVERAGE) { sendCommand(Event.LoadingProgress(it)) }
+                DataType.DATA_MOVIES -> dataManager.loadMovieList(LANGUAGE, MOVIES_VOTE_COUNT, MOVIES_VOTE_AVERAGE) { sendCommand(Event.LoadingProgress(it)) }
+            }
             withContext(dispatchers.main) {
                 if (result is ResultWrapper.Success) entryCount.postValue(result.value)
                 else sendCommand(Event.Error(R.string.error_loading_list))

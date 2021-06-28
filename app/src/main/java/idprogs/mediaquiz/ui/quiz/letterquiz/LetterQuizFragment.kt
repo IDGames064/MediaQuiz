@@ -38,10 +38,10 @@ class LetterQuizFragment: BaseFragment() {
         return mBinding.root
     }
 
-    private fun displayAnswer(movie: Movie) {
+    private fun displayAnswer(value: String) {
         mBinding.fbAnswer.removeAllViews()
         taskElements.removeAll()
-        val words: MutableList<String> = movie.title.split("\\s+".toRegex()).map { word -> word.replace("""^[,.]""".toRegex(),"") }.toMutableList()
+        val words: MutableList<String> = value.split("\\s+".toRegex()).map { word -> word.replace("""^[,.]""".toRegex(),"") }.toMutableList()
         var i = 0
         val maxLength = resources.displayMetrics.widthPixels / CommonUtils.dp2px(30) - 2
         while (i < words.count()) {
@@ -55,7 +55,7 @@ class LetterQuizFragment: BaseFragment() {
             val ll = LinearLayout(context)
             for (idx in word.indices) {
                 val type = if (word[idx].isLetterOrDigit()) ElementType.SYMBOL else ElementType.SEPARATOR
-                val elem = Element(type, word[idx].toUpperCase(), requireContext())
+                val elem = Element(type, word[idx].uppercaseChar(), requireContext())
                 if (type == ElementType.SYMBOL)  taskElements.addElement(elem)
                 elem.attach(ll)
             }
@@ -73,7 +73,10 @@ class LetterQuizFragment: BaseFragment() {
 
     private fun subscribeToLiveData() {
         mViewModel.movieLiveData.observe(this, {
-            if (it != null) displayAnswer(it)
+            if (it != null) displayAnswer(it.title)
+        })
+        mViewModel.artistLiveData.observe(this, {
+            if (it != null) displayAnswer(it.name)
         })
 
         mViewModel.questionAnswered.observe(this, {

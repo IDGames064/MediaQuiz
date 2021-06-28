@@ -5,18 +5,30 @@ import android.content.Intent
 import android.graphics.Color.parseColor
 import android.graphics.Typeface
 import android.os.Build
+import android.os.Bundle
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_IMMERSIVE
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import idprogs.mediaquiz.BuildConfig
+import idprogs.mediaquiz.MainApp
+import idprogs.mediaquiz.utility.DATA_TYPE
+import idprogs.mediaquiz.utility.DataType
 import idprogs.mediaquiz.utility.LANGUAGE
 
 
 @Suppress("DEPRECATION")
 abstract class BaseActivity: AppCompatActivity() {
     private var mProgressDialog: MyProgressDialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val themeName = if (DATA_TYPE == DataType.DATA_ARTISTS) "MusicTheme" else "MovieTheme"
+        val id = resources.getIdentifier(themeName, "style", BuildConfig.APPLICATION_ID)
+        if (id > 0) theme.applyStyle(id, true)
+    }
 
     fun hideLoading() {
         mProgressDialog?.hide()

@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import idprogs.mediaquiz.utility.DATA_TYPE
 
-@Entity (tableName = "movies")
+@Entity (tableName = "movies", primaryKeys = ["id", "type"])
 data class MovieEntry(
-        @PrimaryKey val id: Int,
+        val id: Int,
         @ColumnInfo(name = "title")
         @SerializedName("title", alternate = ["name"])
         val title: String,

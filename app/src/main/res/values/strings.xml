@@ -55,6 +55,7 @@
 
     <string name="movie_display1">%s (%s%s)</string>
     <string name="movie_display2">♥ %s  (%,d голосов)</string>
+    <string name="artist_display" translatable="false">%s &#160;🔥%,d</string>
     <string name="point_count">⭐&#8202;%s</string>
 
     <string name="empty"></string>

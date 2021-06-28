@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="idprogs.mediaquiz.utility.DataType" />
+
         <variable
             name="viewModel"
             type="idprogs.mediaquiz.ui.quiz.QuizViewModel" />
@@ -63,54 +65,102 @@
                 android:gravity="bottom"
                 android:visibility="@{viewModel.questionAnswered}">
 
-                <TextView
-                    android:id="@+id/tvMovie"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/amaticbold"
-                    android:lineSpacingExtra="-10dp"
-                    android:shadowColor="@color/black"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="6"
-                    android:text="@{@string/movie_display1(viewModel.movieLiveData.title,viewModel.movieLiveData.getYear(),viewModel.movieLiveData.number_of_seasons > 0 ? @plurals/seasons(viewModel.movieLiveData.number_of_seasons,viewModel.movieLiveData.number_of_seasons) : @string/empty)}"
-                    android:textColor="@color/blue_grey_100"
-                    android:textSize="@dimen/_22ssp" />
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.currentType == DataType.DATA_ARTISTS}">
 
-                <TextView
-                    android:id="@+id/tvGenres"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tvMovie"
-                    android:layout_marginTop="-8dp"
-                    android:fontFamily="@font/amaticbold"
-                    android:lineSpacingExtra="-6dp"
-                    android:shadowColor="@color/black"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="6"
-                    android:text="@{viewModel.movieLiveData.getGenresString()}"
-                    android:textColor="@color/blue_grey_300"
-                    android:textSize="@dimen/_13ssp" />
+                    <TextView
+                        android:id="@+id/tvArtist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/amaticbold"
+                        android:lineSpacingExtra="-10dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="6"
+                        android:text="@{@string/artist_display(viewModel.artistLiveData.name, viewModel.artistLiveData.listeners)}"
+                        android:textColor="@color/pink_200"
+                        android:textSize="@dimen/_22ssp" />
 
-                <TextView
-                    android:id="@+id/tvRating"
+                    <TextView
+                        android:id="@+id/tvVideo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvArtist"
+                        android:layout_marginTop="-8dp"
+                        android:fontFamily="@font/amaticbold"
+                        android:lineSpacingExtra="-6dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="6"
+                        android:text="@{@string/artist_display(viewModel.musicVideoLiveData.title, viewModel.musicVideoLiveData.viewCount)}"
+                        android:textColor="@color/pink_300"
+                        android:textSize="@dimen/_16ssp"
+                        android:visibility="@{viewModel.musicVideoLiveData != null}" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvGenres"
-                    android:layout_marginTop="-6dp"
-                    android:fontFamily="@font/amaticbold"
-                    android:lineSpacingExtra="-6dp"
-                    android:shadowColor="@color/black"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="6"
-                    android:text="@{@string/movie_display2(viewModel.movieLiveData.vote_average, viewModel.movieLiveData.vote_count)}"
-                    android:textColor="@color/blue_grey_200"
-                    android:textSize="@dimen/_18ssp" />
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.currentType != DataType.DATA_ARTISTS}">
+
+                    <TextView
+                        android:id="@+id/tvMovie"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/amaticbold"
+                        android:lineSpacingExtra="-10dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="6"
+                        android:text="@{@string/movie_display1(viewModel.movieLiveData.title,viewModel.movieLiveData.getYear(),viewModel.movieLiveData.number_of_seasons > 0 ? @plurals/seasons(viewModel.movieLiveData.number_of_seasons,viewModel.movieLiveData.number_of_seasons) : @string/empty)}"
+                        android:textColor="@color/blue_grey_100"
+                        android:textSize="@dimen/_22ssp" />
+
+                    <TextView
+                        android:id="@+id/tvGenres"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvMovie"
+                        android:layout_marginTop="-8dp"
+                        android:fontFamily="@font/amaticbold"
+                        android:lineSpacingExtra="-6dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="6"
+                        android:text="@{viewModel.movieLiveData.getGenresString()}"
+                        android:textColor="@color/blue_grey_300"
+                        android:textSize="@dimen/_13ssp" />
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvGenres"
+                        android:layout_marginTop="-6dp"
+                        android:fontFamily="@font/amaticbold"
+                        android:lineSpacingExtra="-6dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="6"
+                        android:text="@{@string/movie_display2(viewModel.movieLiveData.vote_average, viewModel.movieLiveData.vote_count)}"
+                        android:textColor="@color/blue_grey_200"
+                        android:textSize="@dimen/_18ssp" />
+
+                </LinearLayout>
 
             </RelativeLayout>
-
 
             <ImageView
                 android:id="@+id/restart"
@@ -203,8 +253,8 @@
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
                     android:backgroundTint="#60000000"
-                    app:icon="@drawable/ic_share"
-                    android:onClick="@{() -> viewModel.shareEntry()}" />
+                    android:onClick="@{() -> viewModel.shareEntry()}"
+                    app:icon="@drawable/ic_share" />
 
                 <Button
                     android:id="@+id/btnNext"

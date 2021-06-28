@@ -123,6 +123,11 @@ class QuizViewModel @Inject constructor (
         }
     }
 
+    fun onVideoStart(index: Int) {
+        musicVideoLiveData.postValue(artistLiveData.value!!.videos[index])
+    }
+
+
     private fun correctAnswer() = if (currentType == DataType.DATA_ARTISTS) artistLiveData.value?.name?.getSymbols() else movieLiveData.value?.title?.getSymbols()
 
     fun onAnswerGot(answer: String) {
@@ -146,8 +151,8 @@ class QuizViewModel @Inject constructor (
     }
 
     fun shareEntry() {
-        val link = TMDB_BASE_URL + DATA_TYPE.typeName + '/' + movieLiveData.value!!.id
-        sendCommand(Event.ShareCurrentMovie(link))
+        val url = if (currentType == DataType.DATA_ARTISTS) musicVideoLiveData.value!!.url else TMDB_BASE_URL + DATA_TYPE.typeName + '/' + movieLiveData.value!!.id
+        sendCommand(Event.ShareCurrentEntry(url))
     }
 
 
@@ -197,7 +202,7 @@ class QuizViewModel @Inject constructor (
 
     sealed class Event {
         object Vibrate : Event()
-        data class ShareCurrentMovie(val link: String): Event()
+        data class ShareCurrentEntry(val link: String): Event()
         object Empty: Event()
     }
 
