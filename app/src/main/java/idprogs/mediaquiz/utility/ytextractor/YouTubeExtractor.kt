@@ -9,6 +9,8 @@ import com.evgenii.jsevaluator.JsEvaluator
 import com.evgenii.jsevaluator.interfaces.JsCallback
 import idprogs.mediaquiz.di.DispatcherProvider
 import kotlinx.coroutines.withContext
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.*
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
@@ -18,6 +20,7 @@ import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
 
 class YouTubeExtractor(context: Context, private val http: HttpClient, private val dispatchers: DispatcherProvider) {
 
@@ -41,17 +44,15 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
 
     private val patYouTubePageLink = Pattern.compile("(http|https)://(www\\.|m.|)youtube\\.com/watch\\?v=(.+?)( |\\z|&)")
     private val patYouTubeShortLink = Pattern.compile("(http|https)://(www\\.|)youtu.be/(.+?)( |\\z|&)")
-    private val patStatusOk = Pattern.compile("status=ok(&|,|\\z)")
-    private val patItag = Pattern.compile("itag=([0-9]+?)(&|\\z)")
-    private val patEncSig = Pattern.compile("s=(.{10,}?)(\\\\\\\\u0026|\\z)")
-    private val patUrl = Pattern.compile("\"url\"\\s*:\\s*\"(.+?)\"")
-    private val patCipher = Pattern.compile("\"signatureCipher\"\\s*:\\s*\"(.+?)\"")
-    private val patCipherUrl = Pattern.compile("url=(.+?)(\\\\\\\\u0026|\\z)")
     private val patVariableFunction = Pattern.compile("([{; =])([a-zA-Z$][a-zA-Z0-9$]{0,2})\\.([a-zA-Z$][a-zA-Z0-9$]{0,2})\\(")
     private val patFunction = Pattern.compile("([{; =])([a-zA-Z\$_][a-zA-Z0-9$]{0,2})\\(")
     private val patDecryptionJsFile = Pattern.compile("\\\\/s\\\\/player\\\\/([^\"]+?)\\.js")
     private val patDecryptionJsFileWithoutSlash = Pattern.compile("/s/player/([^\"]+?).js")
     private val patSignatureDecFunction = Pattern.compile("(?:\\b|[^a-zA-Z0-9$])([a-zA-Z0-9$]{2})\\s*=\\s*function\\(\\s*a\\s*\\)\\s*\\{\\s*a\\s*=\\s*a\\.split\\(\\s*\"\"\\s*\\)")
+
+    private val patPlayerResponse = Pattern.compile("var ytInitialPlayerResponse\\s*=\\s*(\\{.+?\\})\\s*;")
+    private val patSigEncUrl = Pattern.compile("url=(.+?)(\\u0026|$)")
+    private val patSignature = Pattern.compile("s=(.+?)(\\u0026|$)")
 
     private val FORMAT_MAP = mapOf(
             Pair(18, Format(18, "mp4", 360, Format.VCodec.H264, Format.ACodec.AAC, 96, false)),
@@ -91,47 +92,90 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
         null
     }
 
-    @Throws(IOException::class, InterruptedException::class)
+    @Throws(IOException::class, InterruptedException::class, JSONException::class)
     private fun getStreamUrls(videoId: String): Map<Int, YtFile>? {
-        val ytInfoUrl = "https://www.youtube.com/get_video_info?video_id=$videoId&html5=1&c=TVHTML5&cver=6.20180913&eurl=" + "https://youtube.googleapis.com/v/$videoId".urlEncode()
+        val encSignatures = SparseArray<String?>()
+        val ytFiles = HashMap<Int, YtFile>()
 
-        var streamMap = ""
-        http.get(ytInfoUrl) { streamMap = it }
+        val ytInfoUrl = "https://youtube.com/watch?v=$videoId"
 
-        var mat: Matcher
-        val curJsFileName: String
-        var encSignatures: SparseArray<String?>? = null
-        streamMap = streamMap.urlDecode().replace("\\u0026", "&")
-
-        // "use_cipher_signature" disappeared, we check whether at least one ciphered signature
-        // exists int the stream_map.
-        var sigEnc = true
-        var statusFail = false
-        if (!patCipher.matcher(streamMap).find()) {
-            sigEnc = false
-            if (!patStatusOk.matcher(streamMap).find()) {
-                statusFail = true
-            }
+        val sbStreamMap = java.lang.StringBuilder()
+        http.get(ytInfoUrl) {
+            sbStreamMap.append(it)
         }
+        val pageHtml = sbStreamMap.toString()
 
-        // Some videos are using a ciphered signature we need to get the
-        // deciphering js-file from the youtubepage.
-        if (sigEnc || statusFail) {
-            // Get the video directly from the youtubepage
-            if (CACHING && (decipherJsFileName == null || decipherFunctions == null || decipherFunctionName == null)) {
+        var mat: Matcher = patPlayerResponse.matcher(pageHtml)
+        if (mat.find()) {
+            val ytPlayerResponse = JSONObject(mat.group(1))
+            val streamingData = ytPlayerResponse.getJSONObject("streamingData")
+            val formats = streamingData.getJSONArray("formats")
+            for (i in 0 until formats.length()) {
+                val format = formats.getJSONObject(i)
+                val itag = format.getInt("itag")
+                if (FORMAT_MAP[itag] != null) {
+                    if (format.has("url")) {
+                        val url = format.getString("url").replace("\\u0026", "&")
+                        ytFiles[itag] = YtFile(FORMAT_MAP[itag]!!, url)
+                    } else if (format.has("signatureCipher")) {
+                        mat = patSigEncUrl.matcher(format.getString("signatureCipher"))
+                        val matSig: Matcher =
+                            patSignature.matcher(format.getString("signatureCipher"))
+                        if (mat.find() && matSig.find()) {
+                            val url = URLDecoder.decode(mat.group(1), "UTF-8")
+                            val signature = URLDecoder.decode(matSig.group(1), "UTF-8")
+                            ytFiles[itag] = YtFile(FORMAT_MAP[itag]!!, url)
+                            encSignatures.append(itag, signature)
+                        }
+                    }
+                }
+            }
+            val adaptiveFormats = streamingData.getJSONArray("adaptiveFormats")
+            for (i in 0 until adaptiveFormats.length()) {
+                val adaptiveFormat = adaptiveFormats.getJSONObject(i)
+                val itag = adaptiveFormat.getInt("itag")
+                if (FORMAT_MAP[itag] != null) {
+                    if (adaptiveFormat.has("url")) {
+                        val url = adaptiveFormat.getString("url").replace("\\u0026", "&")
+                        ytFiles[itag] = YtFile(FORMAT_MAP[itag]!!, url)
+                    } else if (adaptiveFormat.has("signatureCipher")) {
+                        mat = patSigEncUrl.matcher(adaptiveFormat.getString("signatureCipher"))
+                        val matSig: Matcher =
+                            patSignature.matcher(adaptiveFormat.getString("signatureCipher"))
+                        if (mat.find() && matSig.find()) {
+                            val url = URLDecoder.decode(mat.group(1), "UTF-8")
+                            val signature = URLDecoder.decode(matSig.group(1), "UTF-8")
+                            ytFiles[itag] = YtFile(FORMAT_MAP[itag]!!, url)
+                            encSignatures.append(itag, signature)
+                        }
+                    }
+                }
+            }
+/*
+            val videoDetails = ytPlayerResponse.getJSONObject("videoDetails")
+            this.videoMeta = VideoMeta(
+                videoDetails.getString("videoId"),
+                videoDetails.getString("title"),
+                videoDetails.getString("author"),
+                videoDetails.getString("channelId"),
+                videoDetails.getString("lengthSeconds").toLong(),
+                videoDetails.getString("viewCount").toLong(),
+                videoDetails.getBoolean("isLiveContent"),
+                videoDetails.getString("shortDescription")
+            )
+*/
+        } else {
+            Log.d(LOG_TAG, "ytPlayerResponse was not found")
+        }
+        if (encSignatures.size() > 0) {
+            val curJsFileName: String
+            if (CACHING
+                && (decipherJsFileName == null || decipherFunctions == null || decipherFunctionName == null)
+            ) {
                 readDecipherFuncFromCache()
             }
-            if (LOGGING) Log.d(LOG_TAG, "Get from youtube page")
-
-            val sbStreamMap = java.lang.StringBuilder()
-            http.get("https://youtube.com/watch?v=$videoId") {
-                sbStreamMap.append(it.replace("\\\"", "\""))
-            }
-            streamMap = sbStreamMap.toString()
-
-            encSignatures = SparseArray()
-            mat = patDecryptionJsFile.matcher(streamMap)
-            if (!mat.find()) mat = patDecryptionJsFileWithoutSlash.matcher(streamMap)
+            mat = patDecryptionJsFile.matcher(pageHtml)
+            if (!mat.find()) mat = patDecryptionJsFileWithoutSlash.matcher(pageHtml)
             if (mat.find()) {
                 curJsFileName = mat.group(0).replace("\\/", "/")
                 if (decipherJsFileName == null || decipherJsFileName != curJsFileName) {
@@ -140,58 +184,11 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                 }
                 decipherJsFileName = curJsFileName
             }
-        }
-
-        val ytFiles = HashMap<Int, YtFile>()
-        mat = if (sigEnc) {
-            patCipher.matcher(streamMap)
-        } else {
-            patUrl.matcher(streamMap)
-        }
-        while (mat.find()) {
-            var sig: String? = null
-            var url: String
-            if (sigEnc) {
-                val cipher = mat.group(1)
-                var mat2 = patCipherUrl.matcher(cipher)
-                if (mat2.find()) {
-                    url = URLDecoder.decode(mat2.group(1), "UTF-8")
-                    mat2 = patEncSig.matcher(cipher)
-                    if (mat2.find()) {
-                        sig = URLDecoder.decode(mat2.group(1), "UTF-8")
-                        // fix issue #165
-                        sig = sig.replace("\\u0026", "&")
-                        sig = sig.split("&".toRegex()).toTypedArray()[0]
-                    } else {
-                        continue
-                    }
-                } else {
-                    continue
-                }
-            } else {
-                url = mat.group(1)
-            }
-            val mat2 = patItag.matcher(url)
-            if (!mat2.find()) continue
-            val itag = mat2.group(1).toInt()
-            if (FORMAT_MAP[itag] == null) {
-                //if (LOGGING) Log.d(LOG_TAG, "Itag not in list:$itag");
-                continue
-            }
-
-            // Unsupported
-            if (url.contains("&source=yt_otf&")) continue
-            if (LOGGING) Log.d(LOG_TAG, "Itag found:$itag")
-            if (sig != null) {
-                encSignatures!!.append(itag, sig)
-            }
-            val format = FORMAT_MAP[itag]
-            val newVideo = YtFile(format!!, url)
-            ytFiles[itag] = newVideo
-        }
-        if (encSignatures != null) {
-            if (LOGGING) Log.d(LOG_TAG, "Decipher signatures: " + encSignatures.size() + ", videos: " + ytFiles.size
+            if (LOGGING) Log.d(
+                LOG_TAG,
+                "Decipher signatures: " + encSignatures.size() + ", videos: " + ytFiles.size
             )
+            val signature: String?
             decipheredSignature = null
             if (decipherSignature(encSignatures)) {
                 lock.lock()
@@ -201,24 +198,24 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                     lock.unlock()
                 }
             }
-            val signature: String? = decipheredSignature
+            signature = decipheredSignature
             if (signature == null) {
                 return null
             } else {
-                val sigs = signature.split("\n".toRegex()).toTypedArray()
+                val sigs = signature.split("\n").toTypedArray()
                 var i = 0
                 while (i < encSignatures.size() && i < sigs.size) {
                     val key = encSignatures.keyAt(i)
                     var url = ytFiles[key]?.url
                     url += "&sig=" + sigs[i]
                     val newFile = YtFile(FORMAT_MAP[key]!!, url!!)
-                    ytFiles[key] = newFile
+                    ytFiles.put(key, newFile)
                     i++
                 }
             }
         }
         if (ytFiles.isEmpty()) {
-            if (LOGGING) Log.d(LOG_TAG, streamMap)
+            if (LOGGING) Log.d(LOG_TAG, pageHtml)
             return null
         }
         return ytFiles
