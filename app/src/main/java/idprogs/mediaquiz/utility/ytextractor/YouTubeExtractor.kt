@@ -59,14 +59,6 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
             Pair(22, Format(22, "mp4", 720, Format.VCodec.H264, Format.ACodec.AAC, 192, false))
     )
 
-    private fun String.urlEncode(): String {
-        return URLEncoder.encode(this, Charsets.UTF_8.name())
-    }
-
-    private fun String.urlDecode(): String {
-        return URLDecoder.decode(this, Charsets.UTF_8.name())
-    }
-
     suspend fun extract(youtubeLink: String): Map<Int, YtFile>? = withContext(dispatchers.io) {
         var videoID: String? = null
         var mat = patYouTubePageLink.matcher(youtubeLink)
@@ -99,11 +91,11 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
 
         val ytInfoUrl = "https://youtube.com/watch?v=$videoId"
 
-        val sbStreamMap = java.lang.StringBuilder()
+        val sbPageHtml = StringBuilder()
         http.get(ytInfoUrl) {
-            sbStreamMap.append(it)
+            sbPageHtml.append(it)
         }
-        val pageHtml = sbStreamMap.toString()
+        val pageHtml = sbPageHtml.toString()
 
         var mat: Matcher = patPlayerResponse.matcher(pageHtml)
         if (mat.find()) {
@@ -169,9 +161,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
         }
         if (encSignatures.size() > 0) {
             val curJsFileName: String
-            if (CACHING
-                && (decipherJsFileName == null || decipherFunctions == null || decipherFunctionName == null)
-            ) {
+            if (CACHING && (decipherJsFileName == null || decipherFunctions == null || decipherFunctionName == null)) {
                 readDecipherFuncFromCache()
             }
             mat = patDecryptionJsFile.matcher(pageHtml)
@@ -188,7 +178,6 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                 LOG_TAG,
                 "Decipher signatures: " + encSignatures.size() + ", videos: " + ytFiles.size
             )
-            val signature: String?
             decipheredSignature = null
             if (decipherSignature(encSignatures)) {
                 lock.lock()
@@ -198,7 +187,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                     lock.unlock()
                 }
             }
-            signature = decipheredSignature
+            val signature: String? = decipheredSignature
             if (signature == null) {
                 return null
             } else {
@@ -209,7 +198,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                     var url = ytFiles[key]?.url
                     url += "&sig=" + sigs[i]
                     val newFile = YtFile(FORMAT_MAP[key]!!, url!!)
-                    ytFiles.put(key, newFile)
+                    ytFiles[key] = newFile
                     i++
                 }
             }
@@ -228,7 +217,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
         if (decipherFunctionName == null || decipherFunctions == null) {
             val decipherFuncUrl = "https://youtube.com$decipherJsFileName"
             val javascriptFile: String
-            val sb = java.lang.StringBuilder("")
+            val sb = StringBuilder()
             http.get(decipherFuncUrl) {
                 sb.append(it)
                 sb.append(" ")
