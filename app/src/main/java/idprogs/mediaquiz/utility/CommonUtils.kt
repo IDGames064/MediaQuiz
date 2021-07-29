@@ -33,7 +33,7 @@ class CommonUtils {
       fun String.getSymbols(): String {
           var result = ""
           for (symbol in this) {
-              if (symbol.isLetterOrDigit()) result += symbol.toUpperCase()
+              if (symbol.isLetterOrDigit()) result += symbol.uppercaseChar()
           }
           return result
       }
@@ -51,6 +51,7 @@ class CommonUtils {
           if (Build.VERSION.SDK_INT >= 26) {
               vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
           } else {
+              @Suppress("DEPRECATION")
               vibrator.vibrate(50)
           }
       }
