@@ -1,8 +1,10 @@
 <resources>
     <string name="start_quiz">Start Quiz</string>
+    <string name="update_program">Update to version %s</string>
     <string name="load_movies">Load Movies</string>
     <string name="load_series">Load TV Series</string>
     <string name="load_artists">Load Artists</string>
+    <string name="open_with">Open with</string>
 
     <plurals name="number_movies_loaded">
         <item quantity="one">%1$d movie loaded</item>

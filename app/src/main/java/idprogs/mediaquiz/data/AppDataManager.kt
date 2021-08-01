@@ -1,8 +1,9 @@
 package idprogs.mediaquiz.data
 
-import android.util.Log
 import idprogs.mediaquiz.data.api.ApiHelper
 import idprogs.mediaquiz.data.api.ResultWrapper
+import idprogs.mediaquiz.data.api.Updater
+import idprogs.mediaquiz.data.api.model.AppVersion
 import idprogs.mediaquiz.data.api.model.Artist
 import idprogs.mediaquiz.data.api.model.Movie
 import idprogs.mediaquiz.data.db.DbHelper
@@ -16,7 +17,8 @@ import kotlin.random.Random
 
 class AppDataManager @Inject constructor(private val apiHelper: ApiHelper,
                                          private val dbHelper: DbHelper,
-                                         private val preferenceHelper: PreferenceHelper): DataManager {
+                                         private val preferenceHelper: PreferenceHelper,
+                                         private val updater: Updater): DataManager {
     override suspend fun getMovieList(language: String, vote_count: Int, vote_average: Float) = apiHelper.getMovieList(language, vote_count, vote_average)
     override suspend fun getEntryCount() = dbHelper.getCount(DATA_TYPE)
     override suspend fun loadMovieList(language: String, vote_count: Int, vote_average: Float, onProgress: (p: Int) -> Unit): ResultWrapper<Int> {
@@ -117,5 +119,9 @@ class AppDataManager @Inject constructor(private val apiHelper: ApiHelper,
         SERIES_VOTE_COUNT = preferenceHelper.getSeriesVoteCount().first()
         SERIES_VOTE_AVERAGE = preferenceHelper.getSeriesVoteAverage().first()
         ARTIST_COUNT = preferenceHelper.getArtistCount().first()
+    }
+
+    override suspend fun getCurrentAppVersion(): ResultWrapper<AppVersion> {
+        return updater.getCurrentAppVersion()
     }
 }

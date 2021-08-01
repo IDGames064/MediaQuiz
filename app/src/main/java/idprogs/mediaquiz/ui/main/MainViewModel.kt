@@ -3,9 +3,11 @@ package idprogs.mediaquiz.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import idprogs.mediaquiz.BuildConfig
 import idprogs.mediaquiz.R
 import idprogs.mediaquiz.data.DataManager
 import idprogs.mediaquiz.data.api.ResultWrapper
+import idprogs.mediaquiz.data.api.model.AppVersion
 import idprogs.mediaquiz.di.DispatcherProvider
 import idprogs.mediaquiz.ui.base.BaseViewModel
 import idprogs.mediaquiz.utility.*
@@ -24,6 +26,9 @@ class MainViewModel @Inject constructor (
 
     val entryCount = MutableLiveData(0)
 
+    val isUpdateNeeded = MutableLiveData(false)
+    val currentAppVersion = MutableLiveData(AppVersion("",-1,""))
+
     private val mainChannel = Channel<Event>()
     val mainEvent = mainChannel.receiveAsFlow()
 
@@ -32,6 +37,17 @@ class MainViewModel @Inject constructor (
 
     init {
        getEntryCount()
+       checkForUpdate()
+    }
+
+    private fun checkForUpdate() {
+        viewModelScope.launch(dispatchers.io) {
+            val result = dataManager.getCurrentAppVersion()
+            if (result is ResultWrapper.Success) {
+                isUpdateNeeded.postValue(BuildConfig.VERSION_CODE < result.value.versionCode)
+                currentAppVersion.postValue(result.value)
+            }
+        }
     }
 
     private fun getEntryCount() {
@@ -42,6 +58,10 @@ class MainViewModel @Inject constructor (
 
     private fun sendCommand(event: Event) {
         viewModelScope.launch { mainChannel.send(event) }
+    }
+
+    fun downloadUpdate() {
+        sendCommand((Event.ApplyUpdate(currentAppVersion.value!!.apk)))
     }
 
     fun getMovieList() {
@@ -88,6 +108,7 @@ class MainViewModel @Inject constructor (
         data class Loading(val value: Boolean): Event()
         data class LoadingProgress(val progress: Int): Event()
         data class Error(val messageRes: Int): Event()
+        data class ApplyUpdate(val fileName: String): Event()
         object Empty: Event()
     }
 

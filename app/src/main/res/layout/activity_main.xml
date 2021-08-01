@@ -62,6 +62,22 @@
         android:textColor="@drawable/text_color_selector"
         android:backgroundTint="#40000000"/>
 
+    <Button
+        android:id="@+id/btnUpdate"
+        style="@style/AppButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#40000000"
+        android:visibility="@{viewModel.isUpdateNeeded}"
+        android:text="@{@string/update_program(viewModel.currentAppVersion.version)}"
+        android:textSize="@dimen/button_text_size_small"
+        android:onClick="@{() -> viewModel.downloadUpdate()}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnStart" />
+
     <TextView
         android:id="@+id/tvCount"
         android:layout_width="wrap_content"

@@ -14,6 +14,8 @@ enum class DataType(val id: Int, val typeName: String) {
 }
 
 
+const val PROGRAM_VERSION_INFO_URL = "https://idgames064.github.io/progs/MediaQuiz/data.json"
+const val PROGRAM_SHA1_FINGERPRINT = "A7:C8:C6:BC:C8:CC:D0:0D:70:A6:94:47:D6:01:E6:CB:96:AB:65:16"
 
 const val LANGUAGE_DEFAULT = "ru"
 

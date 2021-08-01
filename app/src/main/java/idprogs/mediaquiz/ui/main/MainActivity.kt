@@ -15,6 +15,10 @@ import idprogs.mediaquiz.ui.base.BaseActivity
 import idprogs.mediaquiz.ui.quiz.QuizActivity
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+import androidx.core.content.FileProvider.getUriForFile
+import java.io.File
 
 @AndroidEntryPoint
 class MainActivity: BaseActivity() {
@@ -56,9 +60,19 @@ class MainActivity: BaseActivity() {
                   is MainViewModel.Event.Loading -> if (it.value) showLoading(true) else hideLoading()
                   is MainViewModel.Event.Error -> showError(getString(it.messageRes))
                   MainViewModel.Event.Empty -> Unit
+                  is MainViewModel.Event.ApplyUpdate -> applyUpdate(it.fileName)
               }
            }
        }
+    }
+
+    private fun applyUpdate(fileName: String) {
+        val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(fileName))
+        val intent = Intent(Intent.ACTION_CHOOSER)
+        intent.putExtra(Intent.EXTRA_INTENT, viewIntent)
+        intent.putExtra(Intent.EXTRA_TITLE, R.string.open_with);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun showPreferences() {

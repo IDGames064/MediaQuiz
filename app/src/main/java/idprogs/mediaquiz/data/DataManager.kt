@@ -1,6 +1,7 @@
 package idprogs.mediaquiz.data
 
 import idprogs.mediaquiz.data.api.ResultWrapper
+import idprogs.mediaquiz.data.api.model.AppVersion
 import idprogs.mediaquiz.data.api.model.Artist
 import idprogs.mediaquiz.data.api.model.Movie
 import idprogs.mediaquiz.data.db.model.ArtistEntry
@@ -22,4 +23,6 @@ interface DataManager {
 
     suspend fun loadSettings()
     suspend fun saveSettings()
+
+    suspend fun getCurrentAppVersion(): ResultWrapper<AppVersion>
 }

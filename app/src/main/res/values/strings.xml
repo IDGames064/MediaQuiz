@@ -6,9 +6,11 @@
     <string name="quiz_title_artists" translatable="false">Music Quiz</string>
 
     <string name="start_quiz">Начать Квиз</string>
+    <string name="update_program">Обновить до версии %s</string>
     <string name="load_movies">Загрузить фильмы</string>
     <string name="load_series">Загрузить сериалы</string>
     <string name="load_artists">Загрузить исполнителей</string>
+    <string name="open_with">Открыть в</string>
 
     <plurals name="number_movies_loaded">
         <item quantity="one">%1$d фильм загружен</item>

@@ -67,6 +67,9 @@ object AppModule {
     @Singleton
     fun provideYoutubeExtractor(@ApplicationContext context: Context, http: HttpClient, dispatchers: DispatcherProvider) = YouTubeExtractor(context, http, dispatchers)
 
+    @Provides
+    @Singleton
+    fun provideUpdater(): Updater = AppUpdater()
 
     @Singleton
     @Provides
