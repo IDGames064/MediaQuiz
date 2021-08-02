@@ -22,5 +22,6 @@
 
 
 -keep class idprogs.mediaquiz.data.api.model.** { *; }
+-keep class idprogs.mediaquiz.data.db.model.** { *; }
 
 
