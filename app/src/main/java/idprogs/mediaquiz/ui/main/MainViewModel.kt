@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor (
     var currentType: DataType = DATA_TYPE
 
     init {
-       getEntryCount()
+       getCount()
        checkForUpdate()
     }
 
@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor (
         }
     }
 
-    private fun getEntryCount() {
+    private fun getCount() {
         viewModelScope.launch(dispatchers.io) {
             entryCount.postValue(dataManager.getEntryCount())
         }

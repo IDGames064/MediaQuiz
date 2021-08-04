@@ -1,5 +1,7 @@
 <resources>
-    <dimen name="button_text_size">24sp</dimen>
+    <dimen name="button_text_size">22sp</dimen>
     <dimen name="button_text_size_small">18sp</dimen>
-    <dimen name="option_text_size">28sp</dimen>        
+    <dimen name="option_text_size">28sp</dimen>
+    <dimen name="letter_spacing">-0.01</dimen>
+    <dimen name="button_min_height">60dp</dimen>
 </resources>
