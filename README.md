@@ -6,11 +6,12 @@
 <hr>
 <h2 align="left"> Screenshots: </h2>
 <p align="center">
-<img src="metadata/screenshots/ss1.jpg" width=160>
-<img src="metadata/screenshots/ss2.jpg" width=160>
-<img src="metadata/screenshots/ss3.jpg" width=160>
-<img src="metadata/screenshots/ss5.jpg" width=160>
-<img src="metadata/screenshots/ss6.jpg" width=160>
-<img src="metadata/screenshots/ss7.jpg" width=320>
-<img src="metadata/screenshots/ss8.jpg" width=320>
+<img src="metadata/screenshots/ss1.jpg" width=150>
+<img src="metadata/screenshots/ss2.jpg" width=150>
+<img src="metadata/screenshots/ss3.jpg" width=150>
+<img src="metadata/screenshots/ss4.jpg" width=150>
+<img src="metadata/screenshots/ss6.jpg" width=150>
+<img src="metadata/screenshots/ss5.jpg" width=150>
+<img src="metadata/screenshots/ss7.jpg" width=460>
+<img src="metadata/screenshots/ss8.jpg" width=460>
 </p>
