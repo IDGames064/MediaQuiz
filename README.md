@@ -3,3 +3,14 @@
 </p>
 <h1 align="center"> MediaQuiz </h1>
 <h4 align="center"> Guess the Movie/TV Series/Artist by video fragment. </h4>
+<hr>
+<h2 align="left"> Screenshots: </h2>
+<p align="center">
+<img src="metadata/screenshots/ss1.jpg" width=160>
+<img src="metadata/screenshots/ss2.jpg" width=160>
+<img src="metadata/screenshots/ss3.jpg" width=160>
+<img src="metadata/screenshots/ss5.jpg" width=160>
+<img src="metadata/screenshots/ss6.jpg" width=160>
+<img src="metadata/screenshots/ss7.jpg" width=320>
+<img src="metadata/screenshots/ss8.jpg" width=320>
+</p>
