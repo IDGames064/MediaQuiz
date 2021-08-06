@@ -21,7 +21,9 @@ import java.util.concurrent.locks.ReentrantLock
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-
+/*
+based on https://github.com/HaarigerHarald/android-youtubeExtractor
+*/
 class YouTubeExtractor(context: Context, private val http: HttpClient, private val dispatchers: DispatcherProvider) {
 
     private val CACHING = true
@@ -48,7 +50,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
     private val patFunction = Pattern.compile("([{; =])([a-zA-Z\$_][a-zA-Z0-9$]{0,2})\\(")
     private val patDecryptionJsFile = Pattern.compile("\\\\/s\\\\/player\\\\/([^\"]+?)\\.js")
     private val patDecryptionJsFileWithoutSlash = Pattern.compile("/s/player/([^\"]+?).js")
-    private val patSignatureDecFunction = Pattern.compile("(?:\\b|[^a-zA-Z0-9$])([a-zA-Z0-9$]{2})\\s*=\\s*function\\(\\s*a\\s*\\)\\s*\\{\\s*a\\s*=\\s*a\\.split\\(\\s*\"\"\\s*\\)")
+    private val patSignatureDecFunction = Pattern.compile("(?:\\b|[^a-zA-Z0-9$])([a-zA-Z0-9$]{2,3})\\s*=\\s*function\\(\\s*a\\s*\\)\\s*\\{\\s*a\\s*=\\s*a\\.split\\(\\s*\"\"\\s*\\)")
 
     private val patPlayerResponse = Pattern.compile("var ytInitialPlayerResponse\\s*=\\s*(\\{.+?\\})\\s*;")
     private val patSigEncUrl = Pattern.compile("url=(.+?)(\\u0026|$)")
