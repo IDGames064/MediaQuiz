@@ -113,7 +113,7 @@ class QuizActivity: BaseActivity(), Player.EventListener {
             mBinding.fallback.setImageDrawable(null)
             mBinding.fallback.visibility = View.GONE
             lifecycleScope.launchWhenStarted {
-               val items = extractor.extract(BASE_VIDEO_URL + key)
+               val items = extractor.extract(BASE_VIDEO_URL + key)?.ytFiles
                if (items != null) {
                    mBinding.progressBar.visibility = View.VISIBLE
                    var item = items[22] ?: items[18]
@@ -145,7 +145,7 @@ class QuizActivity: BaseActivity(), Player.EventListener {
         val url = artist.videos[index].url
         Log.d(TAG, "playing: $url  ${artist.videos[index].title}")
         lifecycleScope.launchWhenStarted {
-            val items = extractor.extract(url)
+            val items = extractor.extract(url)?.ytFiles
             if (items != null) {
                 mBinding.progressBar.visibility = View.VISIBLE
                 var item = items[22] ?: items[18]

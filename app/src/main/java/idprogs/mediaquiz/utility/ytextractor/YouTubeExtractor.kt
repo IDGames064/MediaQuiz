@@ -24,6 +24,9 @@ import java.util.regex.Pattern
 /*
 based on https://github.com/HaarigerHarald/android-youtubeExtractor
 */
+
+data class ExtractionResult(val ytFiles: Map<Int, YtFile>?, val videoMeta: VideoMeta?)
+
 class YouTubeExtractor(context: Context, private val http: HttpClient, private val dispatchers: DispatcherProvider) {
 
     private val CACHING = true
@@ -61,7 +64,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
             Pair(22, Format(22, "mp4", 720, Format.VCodec.H264, Format.ACodec.AAC, 192, false))
     )
 
-    suspend fun extract(youtubeLink: String): Map<Int, YtFile>? = withContext(dispatchers.io) {
+    suspend fun extract(youtubeLink: String): ExtractionResult? = withContext(dispatchers.io) {
         var videoID: String? = null
         var mat = patYouTubePageLink.matcher(youtubeLink)
         if (mat.find()) {
@@ -87,9 +90,10 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
     }
 
     @Throws(IOException::class, InterruptedException::class, JSONException::class)
-    private fun getStreamUrls(videoId: String): Map<Int, YtFile>? {
+    private fun getStreamUrls(videoId: String): ExtractionResult? {
         val encSignatures = SparseArray<String?>()
         val ytFiles = HashMap<Int, YtFile>()
+        var videoMeta: VideoMeta? = null
 
         val ytInfoUrl = "https://youtube.com/watch?v=$videoId"
 
@@ -145,19 +149,13 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
                     }
                 }
             }
-/*
+
             val videoDetails = ytPlayerResponse.getJSONObject("videoDetails")
-            this.videoMeta = VideoMeta(
+            videoMeta = VideoMeta(
                 videoDetails.getString("videoId"),
-                videoDetails.getString("title"),
-                videoDetails.getString("author"),
-                videoDetails.getString("channelId"),
-                videoDetails.getString("lengthSeconds").toLong(),
-                videoDetails.getString("viewCount").toLong(),
-                videoDetails.getBoolean("isLiveContent"),
-                videoDetails.getString("shortDescription")
+                videoDetails.getString("title")
             )
-*/
+
         } else {
             Log.d(LOG_TAG, "ytPlayerResponse was not found")
         }
@@ -209,7 +207,7 @@ class YouTubeExtractor(context: Context, private val http: HttpClient, private v
             if (LOGGING) Log.d(LOG_TAG, pageHtml)
             return null
         }
-        return ytFiles
+        return ExtractionResult(ytFiles, videoMeta)
     }
 
 
