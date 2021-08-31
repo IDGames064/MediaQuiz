@@ -11,22 +11,26 @@ import idprogs.mediaquiz.utility.ytextractor.VideoMeta
 import idprogs.mediaquiz.utility.ytextractor.YouTubeExtractor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@ExperimentalCoroutinesApi
 object TestDispatcherProvider: DispatcherProvider {
     override val main: CoroutineDispatcher
-        get() = Dispatchers.Main
+        get() = TestCoroutineDispatcher()
     override val io: CoroutineDispatcher
-        get() = Dispatchers.IO
+        get() = TestCoroutineDispatcher()
     override val default: CoroutineDispatcher
-        get() = Dispatchers.Default
+        get() = TestCoroutineDispatcher()
     override val unconfined: CoroutineDispatcher
-        get() = Dispatchers.Unconfined
+        get() = TestCoroutineDispatcher()
 }
 
 @RunWith(AndroidJUnit4::class)
+@ExperimentalCoroutinesApi
 class YoutubeExtractorTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
